@@ -22,16 +22,10 @@ public class Player : MonoBehaviour {
 
     Coroutine firingCoroutine;
 
-    float xMin;
-    float xMax;
-    float yMin;
-    float yMax;
-
     Rigidbody2D rigidBody;
 
     // Use this for initialization
     void Start () {
-        SetUpMoveBoundaries();
         rigidBody = GetComponent<Rigidbody2D>();
 	}
  
@@ -102,21 +96,12 @@ public class Player : MonoBehaviour {
         var deltaX = Input.GetAxis("Horizontal") * Time.deltaTime * moveSpeed;
         var deltaY = Input.GetAxis("Vertical") * Time.deltaTime * moveSpeed;
 
-        var newXPos = Mathf.Clamp(transform.position.x + deltaX, xMin, xMax);
-        var newYPos = Mathf.Clamp(transform.position.y + deltaY, yMin, yMax);
+        var newXPos = transform.position.x + deltaX;
+        var newYPos = transform.position.y + deltaY;
         //transform.position = new Vector2(newXPos, newYPos);
         rigidBody.MovePosition(new Vector2(newXPos, newYPos));
 
         GetComponent<Animator>().SetFloat("inputX", Input.GetAxis("Horizontal"));
         GetComponent<Animator>().SetFloat("inputY", Input.GetAxis("Vertical"));
-    }
-
-    private void SetUpMoveBoundaries()
-    {
-        Camera gameCamera = Camera.main;
-        xMin = gameCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).x + padding;
-        xMax = gameCamera.ViewportToWorldPoint(new Vector3(1, 0, 0)).x - padding;
-        yMin = gameCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).y + padding;
-        yMax = gameCamera.ViewportToWorldPoint(new Vector3(0, 1, 0)).y - padding;
     }
 }
